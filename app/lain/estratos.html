@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/icono.svg" type="image/x-icon">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.theme.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="plugins/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="js/baseDeDatosEstratos.js"></script>
+    <script src="js/estratos.js"></script>
+    <title>Estratos</title>
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>lain</h1></a>
+        <nav>
+            <a href="estratos.html" style="text-decoration: underline">Estratos</a> |
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </header>
+    <section id="estratos">
+        <div>
+            <h2>Estratos</h2>
+        </div>
+        <div>
+            <select id="opciones">
+                <option value="nombre">Título</option>
+                <option value="personaje">Personaje</option>
+                <option value="actor">Actor</option>
+            </select>
+            <input id="busqueda" type="search">
+            <input type="button" id="buscar" value="Buscar">
+        </div>
+        <div></div>
+        <div id="ventanaModal" title="Error de búsqueda">
+            <p>No se encontró lo que buscabas</p>
+        </div>
+    </section>
+    <footer>Close the world, Open the nExt.</footer>
+</body>
+</html>

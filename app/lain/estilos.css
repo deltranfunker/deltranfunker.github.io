@@ -1,0 +1,653 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('fonts/RobotoMono-Medium.eot');
+    src: url('fonts/RobotoMono-Medium.eot?#iefix') format('embedded-opentype'),
+         url('fonts/RobotoMono-Medium.svg#RobotoMono-Medium') format('svg'),
+         url('fonts/RobotoMono-Medium.ttf') format('truetype'),
+         url('fonts/RobotoMono-Medium.woff') format('woff'),
+         url('fonts/RobotoMono-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+@font-face {
+    font-family: 'MomsTypewriter';
+    src: url('fonts/MomsTypewriter.eot');
+    src: url('fonts/MomsTypewriter.eot?#iefix') format('rembedded-opentype'),
+         url('fonts/MomsTypewriter.svg#MomsTypewriter') format('svg'),
+         url('fonts/MomsTypewriter.ttf') format('truetype'),
+         url('fonts/MomsTypewriter.woff') format('woff'),
+         url('fonts/MomsTypewriter.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}  
+
+@media screen and (min-width: 1200px){
+    html {
+        font-size: 9pt;
+    }
+    section#estratos img {
+        height: 400px;
+    }
+    section#estrato article:first-child>div>figure{
+        max-width: 700px;
+    }
+}
+
+@media screen and (max-width: 1199px){
+    html {
+        font-size: 7pt;
+    }
+    section#contacto form {
+        width: 90%;
+    }
+    section#estrato article:first-child div{
+        flex-direction: column;
+    }
+    section#estrato article:first-of-type div figure div svg.rating {
+        margin-top: 40px;
+    }
+}
+
+@media screen and (min-width: 751px) {
+    header a[href*="index.html"] {
+        width: 200px;
+    }
+    section#estratos div:nth-child(2) {
+        flex-direction: row;
+    }
+}
+
+@media screen and (max-width: 750px){
+    header a[href*="index.html"] {
+        width: 100px;
+    }
+    section#estratos div:nth-child(2) {
+        flex-direction: column;
+    }
+}
+
+/* menu responsive */
+
+@media screen and (min-width: 960px){
+    header, section::before {height: 80px}
+}
+@media screen and (max-width: 959px){
+    header, section::before {height: 120px}
+}
+
+html {
+    font-family: 'Roboto Mono', monospace;
+}
+
+body {
+    background-color: black;
+}
+
+h3, h4, h5, h6 {
+    font-size: 1em;
+    font-weight: normal;
+}
+
+header {
+    font-size: 2rem;
+    text-align: right;
+    position: fixed;
+    width: 100%;
+    z-index: 9999999;
+    color: white;
+    border-bottom: 4px grey solid;
+    background-image: linear-gradient(to bottom, black, rgba(0,0,0,0.5));
+}
+
+
+header a[href*="index.html"] {
+    position: relative;
+    left: 50px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+header h1 {
+    bottom: 10px;
+    font-family: MomsTypewriter;
+    font-size: 4rem;
+}
+
+nav {
+    text-align: right;
+    right: 0;
+    bottom: 5px;
+    width: 60%;
+    height: 100%;
+    padding: 50px;
+    position: absolute;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+header a, header a:visited, header a:active, nav a, nav a:visited, nav a:active {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+main::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-image: var(--myVar);
+    background-position: center center;
+    background-size: 100%;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+main div{
+    margin: 0 auto;
+    position: relative;
+}
+
+main div h1 {
+    position: absolute;
+    top: 50vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    color: skyblue;
+    text-align: center;
+    font-size: 8rem;
+    font-family: MomsTypewriter;
+    text-shadow: 4px 0 0 black, -4px 0 0 black, 0 4px 0 black, 0 -4px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 10px 10px black;
+}
+
+main h5 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    position: absolute;
+    left: 30px;
+    bottom: 30px;
+    color: white;
+}
+
+section:not(#trailer)::before{
+    content: "";
+    display: block;
+    width: 100%;
+    background-color: skyblue;
+}
+
+section#trailer{
+    width: 100%;
+    color: white;
+    background-image: url(img/machine.jpg);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+}
+
+section#trailer>div>div:first-of-type p {
+    margin: 20px auto;
+}
+
+section#trailer>div>div:nth-of-type(2) p {
+    margin: 20px 30px;
+}
+
+section#trailer>div:first-of-type{
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 50px;
+}
+
+section#trailer>div>div {
+    width: 100%;
+    height: 100%;
+    padding: 60px 0;
+    font-size: 1.5rem;
+    display: flex;
+}
+
+section#trailer h2 {
+    font-size: 2rem;
+}
+
+section#trailer>div>div:first-of-type {
+    flex-direction: column;
+    align-items: center;
+}
+
+section#trailer>div>h2:first-of-type {
+    text-align: center;
+}
+
+section#trailer>div:first-of-type>div:first-of-type>div{
+    max-width: 956px;
+}
+
+
+section#trailer video {
+    border: black 5px solid;
+    width: 100%;
+    margin: 20px auto;
+    max-height: 720px;    
+}
+
+section#estratos {
+    position: relative;
+}
+
+section#estratos::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    background-image: url(img/background1.png);
+    filter: saturate(40%) blur(5px);
+    background-size: 100%;
+    z-index: -1;
+}
+
+section#estratos a {
+    text-decoration: none;
+    color: black;
+}
+
+section#estratos div:nth-child(1), section#contacto div:nth-child(1){
+    position: relative;
+    width: 100%;
+    height: 200px;
+    color: white;
+    background-color: black;
+    text-align: center;
+}
+
+section#estratos div:nth-child(1) h2, section#contacto div:nth-child(1) h2{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    font-size: 3rem;
+}
+
+section#estratos div:nth-child(2){
+    width: 100%;
+    overflow: hidden;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+section#estratos div:nth-child(2) input[type*="search"] {
+    width: 100%;
+    max-width: 800px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2rem;
+    border-color: navy;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    height: 4rem;
+    padding: 0 20px;
+    position: relative;
+}
+
+section#estratos div:nth-child(2) select#opciones {
+    font-family: 'Roboto Mono', monospace;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    font-size: 2rem;
+}
+
+section#estratos div:nth-child(2) input[type*="button"] {
+    width: 100px;
+    height: 4rem;
+    border-radius: 20px;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    font-family: 'Roboto Mono', monospace;
+    color: white;
+    background-color: navy;
+}
+
+section#estratos div:nth-child(3){
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+section#estratos a {
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+section#estratos article {
+    max-width: 800px;
+    margin: 15px;
+    text-align: center;
+    background-color: rgba(255,255,255,0.4);
+    border: 2px solid rgba(0,0,0,0.3);
+    box-shadow: 4px 4px rgba(120,120,120,0.3);
+    transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+}
+
+section#estratos article:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+}
+
+section#estratos figcaption {
+    font-family: 'MomsTypewriter', Arial;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+section#estratos img {
+    width: 100%;
+    padding: 30px;
+    object-fit: cover;
+}
+
+.ui-menu-item {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2rem;
+}
+
+section#contacto {
+    position: relative;
+    font-size: 2.5rem;
+    padding-bottom: 50px;
+    color: white;
+}
+
+section#contacto::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url(img/background2.png);
+    background-size: cover;
+    z-index: -1;
+    opacity: 0.2;
+}
+
+section#contacto form {
+    max-width: 600px;
+    margin: 40px auto;
+}
+section#contacto input, section#contacto textarea, section#contacto select{
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.5rem;
+    color: white;
+    background-color: #252525;
+    border: 0;
+    border-bottom: 2px solid white;
+    margin: 20px 0;
+    width: 100%;
+}
+
+input[type*="submit"]:active, input[type*="button"]:active{
+    transform: translate(2px, 2px)
+}
+
+section#contacto input {
+    height: 4rem;
+}
+
+section#contacto textarea {
+    resize: none;
+    height: 16rem;
+}
+
+div#ventanaModal span{
+    text-decoration: underline;
+}
+
+section#estrato {
+    position: relative;
+}
+
+section#estrato::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    background-image: url(img/background1.png);
+    filter: saturate(20%) blur(5px) invert(100%);
+    background-size: contain;
+    z-index: -1;
+}
+
+section#estrato article:first-child{
+    display: flex;
+    justify-content: center;
+    margin: 50px 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+section#estrato article:first-child>div {
+    display: flex;
+    width: 100%;
+    max-width: 1400px;
+}
+
+section#estrato article:first-child figure {
+    flex: 1;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+section#estrato article:first-child figure img {
+    width: 100%;
+    object-fit: cover;
+}
+
+section#estrato article:first-child>div>figure>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section#estrato article:first-child div figure div span {
+    padding: 30px;
+    color: white;
+    font-size: 2rem;
+}
+
+section#estrato article:first-child>div>div {
+    padding: 30px;
+    width: 100%;
+    color: white;
+    font-size: 2rem;
+    flex: 1;
+}
+
+section#estrato article:first-child div h2 {
+    font-family: MomsTypewriter;
+    font-size: 2em;
+    color: white;
+}
+
+section#estrato article:first-child div p {
+    text-align: justify;
+}
+
+section#estrato article:first-child>div>div:nth-child(2) span:not(:first-of-type) {
+    font-size: 0.8em;
+}
+
+section#estrato article:nth-of-type(2) {
+    padding: 50px;
+    color: white;
+    font-size: 2rem;
+    background-color: rgba(22, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+}
+
+section#estrato article:nth-of-type(2)>div {
+    width: 100%;
+    max-width: 900px;
+}
+
+section#estrato input, section#estrato textarea {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.5rem;
+    color: white;
+    background-color: #252525;
+    border: 0;
+    border-bottom: 2px solid white;
+    margin: 0;
+    width: 100%;
+}
+
+section#estrato textarea {
+    resize: none;
+    height: 8rem;
+}
+
+section#estrato>article:nth-child(2) form{
+    margin-bottom: 20px;
+}
+
+section#estrato>article:nth-child(2) fieldset{
+    margin: 10px;
+    float: right;
+}
+
+section#estrato input[id^="first-rate"], section#estrato input[id^="second-rate"], section#estrato input[id*="no-rate"]{
+    width: 0;
+}
+
+section#estrato article:nth-of-type(2) div div#comentarios div {
+    padding: 40px 10px;
+    border-bottom: 2px solid slategrey;
+}
+
+section#estrato article:nth-of-type(2) div div#comentarios div:last-of-type {
+    border-bottom: 0;
+}
+
+section#estrato article:nth-of-type(2) div div#comentarios div span:first-of-type{
+    color: slategrey;
+}
+
+section#estratos option, section#contacto option {
+    font-weight: bold;
+}
+
+footer {
+    width: 100%;
+    height: 300px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    background-color: #0f0f0f;
+}
+
+/* Plugins*/
+
+svg {
+    width: 160px;
+}
+  
+.rating__background {
+    fill: #999999;
+    stroke: red;
+    stroke-width: 1;
+    height: 100%;
+    width: 100%;
+}
+  
+.rating__value {
+    fill: #f5bd23;
+    height: 100%;
+}
+
+
+/* Modificaciones plugins */
+
+.ui-widget-overlay {
+    background-color: #0f0f0f;
+    opacity: 0.5;
+}
+
+.ui-dialog {
+    width: 100% !important;
+    max-width: 800px !important;
+    font-size: 2.5rem !important;
+    border-radius: 20px;
+    position: fixed;
+}
+
+.ui-dialog-titlebar {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.ui-dialog-titlebar-close {
+    width: 35px !important;
+    height: 35px !important;
+    margin: -18px 0 0 0 !important;
+}
+
+.ui-dialog-buttonpane {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.ui-widget {
+    font-family: 'Roboto Mono' !important;
+}
+
+.starability-result {
+    display: block;
+    float: right;
+}

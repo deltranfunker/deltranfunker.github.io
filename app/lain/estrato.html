@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/icono.svg" type="image/x-icon">
+    <link rel="stylesheet" href="plugins/starability-grow.css">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="plugins/jquery-ui-1.12.1/jquery-ui.theme.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="plugins/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="js/baseDeDatosEstratos.js"></script>
+    <script src="js/estrato.js"></script>
+    <link rel="stylesheet" href="plugins/fotorama-4.6.4/fotorama.css">
+    <script src="plugins/fotorama-4.6.4/fotorama.js"></script>
+    <title>Error 404</title>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h1>lain</h1>
+        </a>
+        <nav>
+            <a href="estratos.html">Estratos</a> |
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </header>
+    <section id="estrato">
+        <article>
+            <div><h2>Error 404</h2></div>
+        </article>
+        <article>
+            <div>
+                <form>
+                    <p>Contanos qué te pareció el estrato</p><br>
+                    <input type="text" placeholder="Nombre"><br><br>
+                    <textarea id="ingresarTexto" placeholder="Comentario"></textarea>
+                    <fieldset class="starability-grow">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked
+                            aria-label="No rating." />
+                        <input type="radio" id="second-rate1" name="rating" value="1" />
+                        <label for="second-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="second-rate2" name="rating" value="2" />
+                        <label for="second-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="second-rate3" name="rating" value="3" />
+                        <label for="second-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="second-rate4" name="rating" value="4" />
+                        <label for="second-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="second-rate5" name="rating" value="5" />
+                        <label for="second-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                    <input type="button" id="enviar" value="Enviar"><br>
+                </form>
+                <div id="comentarios"></div>
+            </div>
+        </article>
+    </section>
+    <div id="ventanaModal" title="¡No hagas spam!">
+        <p></p>
+    </div>
+    <footer>Close the world, Open the nExt.</footer>
+</body>
+
+</html>
