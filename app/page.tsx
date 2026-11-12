@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDownRight, ArrowUpRight, Globe2, Mail } from 'lucide-react'
 
 type Language = 'en' | 'es' | 'pt'
@@ -53,13 +53,18 @@ function getLanguage(): Language {
 export default function Page() {
   const [language, setLanguage] = useState<Language>('en')
   const [isScrolled, setIsScrolled] = useState(false)
+  const logoRef = useRef<HTMLAnchorElement>(null)
   useEffect(() => {
     const detectedLanguage = getLanguage()
     setLanguage(detectedLanguage)
     document.documentElement.lang = detectedLanguage
   }, [])
   useEffect(() => {
-    const updateScrollState = () => setIsScrolled(window.scrollY > 80)
+    const updateScrollState = () => {
+      const scrollY = window.scrollY
+      logoRef.current?.style.setProperty('--scroll-offset', `${scrollY}px`)
+      setIsScrolled(scrollY > 80)
+    }
     updateScrollState()
     window.addEventListener('scroll', updateScrollState, { passive: true })
     return () => window.removeEventListener('scroll', updateScrollState)
@@ -72,12 +77,12 @@ export default function Page() {
         <span className="topbar-note">Deltran Funker</span>
         <label className="language-control"><Globe2 aria-hidden="true" /><span className="sr-only">Choose language</span><select value={language} onChange={(event) => setLanguage(event.target.value as Language)} aria-label="Choose language"><option value="es">🇺🇾 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option></select></label>
       </header>
-      <a className={`brand-logo${isScrolled ? ' is-docked' : ''}`} href="#top" aria-label="Deltran Funker home"><img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker_v3_1920-TzEiHE8AmHeiSHA4lubceXAoxM9St7.png" alt="Deltran Funker official yellow and cyan key emblem" /></a>
+      <a ref={logoRef} className={`brand-logo${isScrolled ? ' is-docked' : ''}`} href="#top" aria-label="Deltran Funker home"><img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker_v3_1920-TzEiHE8AmHeiSHA4lubceXAoxM9St7.png" alt="Deltran Funker official yellow and cyan key emblem" /></a>
 
       <section className="hero hero-logo-stage" aria-labelledby="hero-title">
         <div className="hero-media" aria-hidden="true"><div className="media-glow media-glow-a" /><div className="media-glow media-glow-b" /><div className="media-grid" /><div className="media-scanlines" /><div className="media-noise" /></div>
         <div className="hero-kicker"><span className="live-dot" /> {t.available}<span className="hero-index">34° S / 56° W</span></div>
-        <div className="hero-bottom hero-stage-copy"><div><h1 id="hero-title">{t.stageTitle.split('|').map((line, index) => <span key={line}>{index ? <em>{line}</em> : line}<br /></span>)}</h1><p className="stage-intro">{t.intro.split('\n').map((line) => <span key={line}>{line}<br /></span>)}</p></div><a className="scroll-link" href="#work">{t.scroll}<ArrowDownRight aria-hidden="true" /></a></div>
+        <div className="hero-bottom hero-stage-copy"><div><h1 id="hero-title">{t.stageTitle.split('|').map((line, index) => <span key={line}>{index ? <em>{line}</em> : line}<br /></span>)}</h1></div><a className="scroll-link" href="#work">{t.scroll}<ArrowDownRight aria-hidden="true" /></a></div>
         <div className="hero-side-note">SOUND IN / WORLDS OUT</div>
       </section>
 
@@ -93,7 +98,7 @@ export default function Page() {
 
       <section className="about-section" id="about"><div className="about-copy"><p className="eyebrow">{t.aboutEyebrow}</p><h2>{t.aboutTitle.split('\n').map((line, index) => <span key={line}>{index === 1 ? <em>{line}</em> : line}<br /></span>)}</h2><p className="about-description">{t.aboutText}</p></div></section>
 
-      <section className="contact-section" id="contact"><span className="eyebrow">{t.contactEyebrow}</span><h2>{t.contactTitle.split('\n').map((line, index) => <span key={line}>{index === 1 ? <em>{line}</em> : line}<br /></span>)}</h2><a className="contact-link" href="mailto:deltranfunker@gmail.com"><Mail aria-hidden="true" />deltranfunker@gmail.com <ArrowUpRight aria-hidden="true" /></a><a className="contact-link" href="https://www.instagram.com/deltranfunker/" target="_blank" rel="noreferrer"><InstagramIcon />@DELTRANFUNKER <ArrowUpRight aria-hidden="true" /></a></section>
+      <section className="contact-section" id="contact"><span className="eyebrow">{t.contactEyebrow}</span><h2>{t.contactTitle.split('\n').map((line, index) => <span key={line}>{index === 1 ? <em>{line}</em> : line}<br /></span>)}</h2><a className="contact-link" href="mailto:deltranfunker@gmail.com"><Mail aria-hidden="true" />deltranfunker@gmail.com <ArrowUpRight aria-hidden="true" /></a><a className="contact-link" href="https://www.instagram.com/deltranfunker/" target="_blank" rel="noreferrer"><InstagramIcon />@deltranfunker <ArrowUpRight aria-hidden="true" /></a></section>
       <footer><span>MONTEVIDEO · URUGUAY 🇺🇾</span><a href="#top">{t.back} ↑</a></footer>
     </main>
   )
