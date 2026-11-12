@@ -2,8 +2,6 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-
 export const metadata: Metadata = {
   title: 'Deltran Funker — VJ & Visual Artist',
   description: 'Live audiovisual worlds from Deltran Funker: 2D and 3D art, custom shaders, videogame-inspired visuals, and VJ performances from 34° S / 56° W.',
@@ -11,19 +9,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: `${basePath}/icon-light-32x32.png`,
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: `${basePath}/icon-dark-32x32.png`,
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: `${basePath}/icon.svg`,
-        type: 'image/svg+xml',
+        url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker_v3_1920-TzEiHE8AmHeiSHA4lubceXAoxM9St7.png',
+        type: 'image/png',
       },
     ],
-    apple: `${basePath}/apple-icon.png`,
+    apple: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker_v3_1920-TzEiHE8AmHeiSHA4lubceXAoxM9St7.png',
   },
 }
 
