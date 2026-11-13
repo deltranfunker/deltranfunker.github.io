@@ -337,13 +337,16 @@ section#estratos div:nth-child(2) input[type*="search"] {
     height: 4rem;
     padding: 0 20px;
     position: relative;
+    color: black;
 }
 
 section#estratos div:nth-child(2) select#opciones {
     font-family: 'Roboto Mono', monospace;
     background-color: rgba(255, 255, 255, 0.8);
+    color:dimgray;
     border-radius: 20px;
     font-size: 2rem;
+    padding-left: 20px;
 }
 
 section#estratos div:nth-child(2) input[type*="button"] {
