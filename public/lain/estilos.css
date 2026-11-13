@@ -98,12 +98,14 @@ footer span:first-child::after {
     header a[href*="index.html"]{left: 50px}
     header {font-size: 2rem}
     nav {padding: 50px}
+    section#trailer>div>div:nth-of-type(2) p {margin: 20px 30px;}
 }
 @media screen and (max-width: 959px){
     header, section::before {height: 120px}
     header a[href*="index.html"]{left: 35px}
     header {font-size: 1.5rem}
     nav {padding: 60px 35px 35px 35px}
+    section#trailer>div>div:nth-of-type(2) p {margin: 20px 0;}
 }
 
 html {
@@ -229,10 +231,6 @@ section#trailer{
 
 section#trailer>div>div:first-of-type p {
     margin: 20px auto;
-}
-
-section#trailer>div>div:nth-of-type(2) p {
-    margin: 20px 30px;
 }
 
 section#trailer>div:first-of-type{
