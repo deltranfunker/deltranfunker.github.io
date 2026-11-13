@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useId, useState, type FormEvent, type ChangeEvent } from 'react'
-import { Plus, Save, Trash2, Upload } from 'lucide-react'
+import { ArrowDown, ArrowUp, Plus, Save, Trash2, Upload } from 'lucide-react'
 import useSWR from 'swr'
 import {
   deletePortfolioEvent,
@@ -10,6 +10,7 @@ import {
   uploadContentMedia,
 } from '@/lib/site-content-api'
 import { DEFAULT_EVENTS, SITE_LANGUAGES, type Locale, type PortfolioEvent } from '@/lib/site-content'
+import { normalizeEventEmbedUrl } from '@/lib/event-media'
 
 function newEvent(events: PortfolioEvent[]): PortfolioEvent {
   const nextNumber = events.reduce((max, event) => Math.max(max, Number.parseInt(event.display_number, 10) || 0), 0) + 1
@@ -24,7 +25,7 @@ function newEvent(events: PortfolioEvent[]): PortfolioEvent {
     media_url: null,
     media_type: 'none',
     visual_style: 'visual-one',
-    link_url: 'https://www.instagram.com/deltranfunker/',
+    link_url: null,
     is_active: true,
   }
 }
@@ -61,7 +62,7 @@ export default function EventsEditor() {
     }
   }
 
-  return <div className="admin-panel-stack"><header className="admin-panel-heading"><span className="admin-kicker">02 / EVENTS</span><h2>Curate the lineup.</h2><p>Add or remove event cards, edit their text in all three languages, and upload new artwork.</p></header>
+  return <div className="admin-panel-stack"><header className="admin-panel-heading"><span className="admin-kicker">02 / EVENTS</span><h2>Curate the lineup.</h2><p>Edit each card&apos;s preview artwork, full event story, and modal gallery in all three languages.</p></header>
     {error && <div className="admin-card admin-error" role="alert">Could not load events. Confirm the signed-in account has admin access.</div>}
     <div className="admin-event-toolbar"><p className="admin-feedback" role="status">{message}</p><button className="admin-button admin-button-primary" type="button" onClick={() => { setCreating(true); setMessage('') }} disabled={creating || isLoading}><Plus aria-hidden="true" /> Add event</button></div>
     {creating && <EventForm event={newEvent(events)} loading={isLoading} onSave={handleSave} onCancel={() => setCreating(false)} />}
@@ -83,12 +84,86 @@ function EventForm({ event, loading, onSave, onDelete, onCancel }: {
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const fileId = useId()
+  const galleryFileId = useId()
+  const embedFieldId = useId()
   const fieldId = useId()
+  const [embedUrl, setEmbedUrl] = useState('')
 
   useEffect(() => setDraft(event), [event])
 
-  function updateLocalized(field: 'title' | 'description', value: string) {
+  function updateLocalized(field: 'title' | 'description' | 'detail_description', value: string) {
     setDraft((current) => ({ ...current, [field]: { ...current[field], [locale]: value } }))
+  }
+
+  function updateGalleryCaption(mediaIndex: number, value: string) {
+    setDraft((current) => ({
+      ...current,
+      gallery_media: current.gallery_media.map((item, index) => index === mediaIndex
+        ? { ...item, caption: { ...item.caption, [locale]: value } }
+        : item),
+    }))
+  }
+
+  function moveGalleryItem(mediaIndex: number, direction: -1 | 1) {
+    setDraft((current) => {
+      const nextIndex = mediaIndex + direction
+      if (nextIndex < 0 || nextIndex >= current.gallery_media.length) return current
+      const gallery_media = [...current.gallery_media]
+      ;[gallery_media[mediaIndex], gallery_media[nextIndex]] = [gallery_media[nextIndex], gallery_media[mediaIndex]]
+      return { ...current, gallery_media }
+    })
+  }
+
+  function removeGalleryItem(mediaIndex: number) {
+    setDraft((current) => ({ ...current, gallery_media: current.gallery_media.filter((_, index) => index !== mediaIndex) }))
+  }
+
+  async function handleGalleryFiles(changeEvent: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(changeEvent.currentTarget.files ?? [])
+    changeEvent.currentTarget.value = ''
+    if (!files.length) return
+
+    setUploading(true)
+    setMessage('')
+    try {
+      for (const file of files) {
+        const uploaded = await uploadContentMedia(file, 'events')
+        setDraft((current) => ({
+          ...current,
+          gallery_media: [...current.gallery_media, {
+            id: crypto.randomUUID(),
+            type: uploaded.type,
+            url: uploaded.url,
+            caption: { en: '', es: '', pt: '' },
+          }],
+        }))
+      }
+      setMessage(`${files.length} gallery item${files.length === 1 ? '' : 's'} added. Save this event to publish.`)
+    } catch (uploadError) {
+      setMessage(uploadError instanceof Error ? uploadError.message : 'Gallery upload failed.')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  function handleAddEmbed() {
+    const url = normalizeEventEmbedUrl(embedUrl)
+    if (!url) {
+      setMessage('Paste a valid YouTube or Vimeo link.')
+      return
+    }
+
+    setDraft((current) => ({
+      ...current,
+      gallery_media: [...current.gallery_media, {
+        id: crypto.randomUUID(),
+        type: 'embed',
+        url,
+        caption: { en: '', es: '', pt: '' },
+      }],
+    }))
+    setEmbedUrl('')
+    setMessage('Embed added. Save this event to publish it.')
   }
 
   async function handleSubmit(formEvent: FormEvent<HTMLFormElement>) {
@@ -138,21 +213,42 @@ function EventForm({ event, loading, onSave, onDelete, onCancel }: {
 
   const title = draft.title[locale] ?? ''
   const description = draft.description[locale] ?? ''
+  const detailDescription = draft.detail_description[locale] ?? ''
 
   return <form className="admin-card admin-event-card" onSubmit={handleSubmit}>
     <div className="admin-event-card-heading"><span className="admin-kicker">EVENT</span><label className="admin-toggle admin-toggle-compact"><input type="checkbox" checked={draft.is_active} onChange={(formEvent) => setDraft((current) => ({ ...current, is_active: formEvent.target.checked }))} /><span className="admin-toggle-track" /><span><strong>Visible</strong></span></label></div>
     <div className="admin-event-grid">
-      <div className="admin-event-media"><div className={`admin-event-preview ${draft.visual_style}`}>{draft.media_url ? (draft.media_type === 'video' ? <video src={draft.media_url} controls muted playsInline /> : <img src={draft.media_url} alt="Event artwork preview" />) : <span>NO MEDIA</span>}</div>
-        <label className="admin-file-picker" htmlFor={fileId}><input id={fileId} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/webm" onChange={handleFile} disabled={uploading || loading || saving} /><span><Upload aria-hidden="true" /> {uploading ? 'Uploading…' : 'Replace artwork'}</span><small>Image or looping video · max 50 MB</small></label>
-        {draft.media_url && <button className="admin-text-button" type="button" onClick={() => setDraft((current) => ({ ...current, media_url: null, media_type: 'none' }))}>Remove artwork</button>}
+      <div className="admin-event-media"><div className="admin-gallery-heading"><h3>Preview artwork</h3><p>Shown on the event card and as the modal cover. This is separate from the media below.</p></div><div className={`admin-event-preview ${draft.visual_style}`}>{draft.media_url ? (draft.media_type === 'video' ? <video src={draft.media_url} controls muted playsInline /> : <img src={draft.media_url} alt="Event preview artwork" />) : <span>NO MEDIA</span>}</div>
+        <label className="admin-file-picker" htmlFor={fileId}><input id={fileId} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/webm" onChange={handleFile} disabled={uploading || loading || saving} /><span><Upload aria-hidden="true" /> {uploading ? 'Uploading…' : 'Replace preview artwork'}</span><small>Image or looping video · max 50 MB</small></label>
+        {draft.media_url && <button className="admin-text-button" type="button" onClick={() => setDraft((current) => ({ ...current, media_url: null, media_type: 'none' }))}>Remove preview artwork</button>}
         <div className="admin-field"><label htmlFor={`${fieldId}-style`}>Artwork fallback</label><select id={`${fieldId}-style`} className="admin-input" value={draft.visual_style} onChange={(formEvent) => setDraft((current) => ({ ...current, visual_style: formEvent.target.value }))}><option value="visual-one">Nebula</option><option value="visual-two">Dark field</option><option value="visual-three">Signal pattern</option></select></div>
       </div>
       <div className="admin-event-fields"><div className="admin-field"><label htmlFor={`${fieldId}-order`}>Display order</label><input id={`${fieldId}-order`} className="admin-input" type="number" min="1" step="1" value={draft.sort_order} onChange={(formEvent) => setDraft((current) => ({ ...current, sort_order: Number(formEvent.target.value) }))} /></div>
         <LanguageTabs locale={locale} onChange={setLocale} />
         <div className="admin-field"><label htmlFor={`${fieldId}-title`}>Title · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><input id={`${fieldId}-title`} className="admin-input" value={title} onChange={(formEvent) => updateLocalized('title', formEvent.target.value)} /></div>
-        <div className="admin-field"><label htmlFor={`${fieldId}-description`}>Description · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><textarea id={`${fieldId}-description`} className="admin-input" rows={3} value={description} onChange={(formEvent) => updateLocalized('description', formEvent.target.value)} /></div>
+        <div className="admin-field"><label htmlFor={`${fieldId}-description`}>Card description · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><textarea id={`${fieldId}-description`} className="admin-input" rows={3} value={description} onChange={(formEvent) => updateLocalized('description', formEvent.target.value)} /></div>
+        <div className="admin-field"><label htmlFor={`${fieldId}-detail-description`}>Full event story · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><textarea id={`${fieldId}-detail-description`} className="admin-input" rows={6} value={detailDescription} onChange={(formEvent) => updateLocalized('detail_description', formEvent.target.value)} /></div>
       </div>
     </div>
+    <section className="admin-event-gallery" aria-labelledby={`${fieldId}-gallery-heading`}>
+      <div className="admin-gallery-heading"><div><h3 id={`${fieldId}-gallery-heading`}>Modal gallery</h3><p>Manage the images, videos, and embeds shown after opening this event.</p></div></div>
+      <div className="admin-gallery-add">
+        <label className="admin-file-picker" htmlFor={galleryFileId}><input id={galleryFileId} type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/webm" onChange={handleGalleryFiles} disabled={uploading || loading || saving} /><span><Upload aria-hidden="true" /> {uploading ? 'Uploading…' : 'Add gallery media'}</span><small>Images or video · max 50 MB each</small></label>
+        <div className="admin-gallery-embed-add"><div className="admin-field"><label htmlFor={embedFieldId}>YouTube or Vimeo link</label><input id={embedFieldId} className="admin-input" type="url" value={embedUrl} onChange={(formEvent) => setEmbedUrl(formEvent.target.value)} placeholder="https://youtu.be/…" /></div><button className="admin-button admin-button-secondary" type="button" onClick={handleAddEmbed} disabled={!embedUrl.trim() || loading || saving}><Plus aria-hidden="true" /> Add embed</button></div>
+      </div>
+      {draft.gallery_media.length > 0 && <ol className="admin-gallery-list">{draft.gallery_media.map((item, index) => {
+        const embedSource = item.type === 'embed' ? normalizeEventEmbedUrl(item.url) : null
+        const captionId = `${galleryFileId}-caption-${index}`
+        return <li className="admin-gallery-item" key={item.id}>
+          <div className="admin-gallery-preview">{item.type === 'embed'
+            ? embedSource ? <iframe src={embedSource} title={item.caption[locale] || 'Embedded media preview'} sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" /> : <span>UNSUPPORTED EMBED</span>
+            : item.type === 'video' ? <video src={item.url} muted playsInline preload="metadata" /> : <img src={item.url} alt={item.caption[locale] || 'Gallery media preview'} />}</div>
+          <div className="admin-gallery-item-fields"><div className="admin-field"><label htmlFor={captionId}>Caption · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><input id={captionId} className="admin-input" value={item.caption[locale] ?? ''} onChange={(formEvent) => updateGalleryCaption(index, formEvent.target.value)} /></div>
+            <div className="admin-gallery-controls"><span className="admin-gallery-type">{item.type === 'embed' ? 'EMBED' : item.type.toUpperCase()}</span><button className="admin-icon-button" type="button" aria-label={`Move media ${index + 1} up`} onClick={() => moveGalleryItem(index, -1)} disabled={index === 0}><ArrowUp aria-hidden="true" /></button><button className="admin-icon-button" type="button" aria-label={`Move media ${index + 1} down`} onClick={() => moveGalleryItem(index, 1)} disabled={index === draft.gallery_media.length - 1}><ArrowDown aria-hidden="true" /></button><button className="admin-text-button admin-gallery-remove" type="button" onClick={() => removeGalleryItem(index)}>Remove</button></div>
+          </div>
+        </li>
+      })}</ol>}
+    </section>
     <div className="admin-form-footer"><p className="admin-feedback" role="status">{message}</p><div className="admin-form-actions">{onCancel && <button className="admin-button admin-button-secondary" type="button" onClick={onCancel}>Cancel</button>}{onDelete && <button className="admin-button admin-button-danger" type="button" onClick={() => void handleDelete()} disabled={saving || loading}><Trash2 aria-hidden="true" /> Remove</button>}<button className="admin-button admin-button-primary" type="submit" disabled={saving || loading || uploading}><Save aria-hidden="true" /> {saving ? 'Saving…' : 'Save event'}</button></div></div>
   </form>
 }
