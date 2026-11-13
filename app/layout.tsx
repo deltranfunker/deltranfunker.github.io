@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Deltran Funker — VJ & Visual Artist',
-  description: 'Live audiovisual worlds from Deltran Funker: 2D and 3D art, custom shaders, videogame-inspired visuals, and VJ performances from 34° S / 56° W.',
+  title: 'Deltran Funker — Visualist',
+  description: 'Live audiovisual worlds from Deltran Funker: 2D and 3D art, shaders, videogame-inspired visuals, and VJ performances from 34° S / 56° W.',
   generator: 'v0.app',
   icons: {
     icon: [
