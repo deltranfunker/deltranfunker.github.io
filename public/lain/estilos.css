@@ -95,9 +95,15 @@ footer span:first-child::after {
 
 @media screen and (min-width: 960px){
     header, section::before {height: 80px}
+    header a[href*="index.html"]{left: 50px}
+    header {font-size: 2rem}
+    nav {padding: 50px}
 }
 @media screen and (max-width: 959px){
     header, section::before {height: 120px}
+    header a[href*="index.html"]{left: 35px}
+    header {font-size: 1.5rem}
+    nav {padding: 60px 35px 35px 35px}
 }
 
 html {
@@ -114,7 +120,6 @@ h3, h4, h5, h6 {
 }
 
 header {
-    font-size: 2rem;
     text-align: right;
     position: fixed;
     width: 100%;
@@ -127,7 +132,6 @@ header {
 
 header a[href*="index.html"] {
     position: relative;
-    left: 50px;
     display: flex;
     height: 100%;
     align-items: center;
@@ -146,7 +150,6 @@ nav {
     bottom: 5px;
     width: 75%;
     height: 100%;
-    padding: 50px;
     position: absolute;
 }
 
