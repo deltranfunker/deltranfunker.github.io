@@ -29,7 +29,7 @@ const copy = {
   pt: {
     navWork: 'Trabalhos', navAbout: 'Sobre', navContact: 'Contato', available: 'DISPONÍVEL PARA EVENTOS', scroll: 'ROLE PARA EXPLORAR',
     lineOne: 'MUNDOS', lineTwo: 'VISUAIS', lineThree: 'AO VIVO', stageLabel: 'DELTRAN FUNKER / MONTEVIDÉU', stageTitle: 'VISUAIS|EM TEMPO REAL', intro: 'Visuais em tempo real para\no espaço entre som e luz.',
-    ticker: 'VJ', ticker2: 'ARTISTA VISUAL', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
+    ticker: 'VJ', ticker2: 'VISUALISTA', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
     workEyebrow: 'EVENTOS', viewEvent: 'Ver galeria do evento', contactEyebrow: 'QUAL É A FREQUÊNCIA?', contactTitle: 'VAMOS FAZER\nALGO SE MOVER.', location: '34° S / 56° W · MONTEVIDÉU · URUGUAI 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLTAR AO TOPO',
   },
 } satisfies Record<Locale, Record<string, string>>
