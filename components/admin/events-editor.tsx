@@ -91,10 +91,6 @@ function EventForm({ event, loading, onSave, onDelete, onCancel }: {
 
   async function handleSubmit(formEvent: FormEvent<HTMLFormElement>) {
     formEvent.preventDefault()
-    if (!draft.display_number.trim()) {
-      setMessage('Add an event number before saving.')
-      return
-    }
     if (!draft.title.en?.trim()) {
       setMessage('Add an English title before saving.')
       return
@@ -129,7 +125,7 @@ function EventForm({ event, loading, onSave, onDelete, onCancel }: {
   }
 
   async function handleDelete() {
-    if (!onDelete || !window.confirm(`Remove event ${draft.display_number}? This cannot be undone.`)) return
+    if (!onDelete || !window.confirm('Remove this event? This cannot be undone.')) return
     setSaving(true)
     try {
       await onDelete()
@@ -142,14 +138,14 @@ function EventForm({ event, loading, onSave, onDelete, onCancel }: {
   const description = draft.description[locale] ?? ''
 
   return <form className="admin-card admin-event-card" onSubmit={handleSubmit}>
-    <div className="admin-event-card-heading"><span className="admin-kicker">EVENT / {draft.display_number}</span><label className="admin-toggle admin-toggle-compact"><input type="checkbox" checked={draft.is_active} onChange={(formEvent) => setDraft((current) => ({ ...current, is_active: formEvent.target.checked }))} /><span className="admin-toggle-track" /><span><strong>Visible</strong></span></label></div>
+    <div className="admin-event-card-heading"><span className="admin-kicker">EVENT</span><label className="admin-toggle admin-toggle-compact"><input type="checkbox" checked={draft.is_active} onChange={(formEvent) => setDraft((current) => ({ ...current, is_active: formEvent.target.checked }))} /><span className="admin-toggle-track" /><span><strong>Visible</strong></span></label></div>
     <div className="admin-event-grid">
-      <div className="admin-event-media"><div className={`admin-event-preview ${draft.visual_style}`}>{draft.media_url ? (draft.media_type === 'video' ? <video src={draft.media_url} controls muted playsInline /> : <img src={draft.media_url} alt={`Preview for event ${draft.display_number}`} />) : <span>NO MEDIA</span>}</div>
+      <div className="admin-event-media"><div className={`admin-event-preview ${draft.visual_style}`}>{draft.media_url ? (draft.media_type === 'video' ? <video src={draft.media_url} controls muted playsInline /> : <img src={draft.media_url} alt="Event artwork preview" />) : <span>NO MEDIA</span>}</div>
         <label className="admin-file-picker" htmlFor={fileId}><input id={fileId} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/webm" onChange={handleFile} disabled={uploading || loading || saving} /><span><Upload aria-hidden="true" /> {uploading ? 'Uploading…' : 'Replace artwork'}</span><small>Image or looping video · max 50 MB</small></label>
         {draft.media_url && <button className="admin-text-button" type="button" onClick={() => setDraft((current) => ({ ...current, media_url: null, media_type: 'none' }))}>Remove artwork</button>}
         <div className="admin-field"><label htmlFor={`${fieldId}-style`}>Artwork fallback</label><select id={`${fieldId}-style`} className="admin-input" value={draft.visual_style} onChange={(formEvent) => setDraft((current) => ({ ...current, visual_style: formEvent.target.value }))}><option value="visual-one">Nebula</option><option value="visual-two">Dark field</option><option value="visual-three">Signal pattern</option></select></div>
       </div>
-      <div className="admin-event-fields"><div className="admin-inline-fields"><div className="admin-field"><label htmlFor={`${fieldId}-number`}>Card number</label><input id={`${fieldId}-number`} className="admin-input" value={draft.display_number} onChange={(formEvent) => setDraft((current) => ({ ...current, display_number: formEvent.target.value }))} /></div><div className="admin-field"><label htmlFor={`${fieldId}-order`}>Display order</label><input id={`${fieldId}-order`} className="admin-input" type="number" min="1" step="1" value={draft.sort_order} onChange={(formEvent) => setDraft((current) => ({ ...current, sort_order: Number(formEvent.target.value) }))} /></div></div>
+      <div className="admin-event-fields"><div className="admin-field"><label htmlFor={`${fieldId}-order`}>Display order</label><input id={`${fieldId}-order`} className="admin-input" type="number" min="1" step="1" value={draft.sort_order} onChange={(formEvent) => setDraft((current) => ({ ...current, sort_order: Number(formEvent.target.value) }))} /></div>
         <LanguageTabs locale={locale} onChange={setLocale} />
         <div className="admin-field"><label htmlFor={`${fieldId}-title`}>Title · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><input id={`${fieldId}-title`} className="admin-input" value={title} onChange={(formEvent) => updateLocalized('title', formEvent.target.value)} /></div>
         <div className="admin-field"><label htmlFor={`${fieldId}-description`}>Description · {SITE_LANGUAGES.find((item) => item.code === locale)?.label}</label><textarea id={`${fieldId}-description`} className="admin-input" rows={3} value={description} onChange={(formEvent) => updateLocalized('description', formEvent.target.value)} /></div>

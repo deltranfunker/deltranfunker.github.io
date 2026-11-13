@@ -139,15 +139,14 @@ export default function PortfolioPage() {
         <div className="project-grid">{events.map((project) => {
           const title = localizedValue(project.title, language)
           const description = localizedValue(project.description, language)
-          return <a className="project" href={project.link_url || '#work'} target={project.link_url ? '_blank' : undefined} rel={project.link_url ? 'noreferrer' : undefined} key={project.id ?? project.display_number}>
+          return <div className="project" key={project.id ?? project.display_number}>
             <div className={`project-art ${project.visual_style || 'visual-one'}`}>
               {project.media_url && (project.media_type === 'video'
                 ? <video className="project-media" src={project.media_url} muted loop autoPlay playsInline preload="metadata" aria-label={`${title} project video`} />
                 : <img className="project-media" src={project.media_url} alt={`${title} project visual`} loading="lazy" decoding="async" />)}
-              <span className="project-number">{project.display_number}</span><span className="project-arrow"><ArrowUpRight aria-hidden="true" /></span><span className="project-art-label">DF—{project.display_number}</span>
             </div>
             <div className="project-meta"><h3>{title}</h3><span>{description}</span></div>
-          </a>
+          </div>
         })}</div>
       </section>
 
