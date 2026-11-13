@@ -55,6 +55,9 @@
     section#estrato article:first-of-type div figure div svg.rating {
         margin-top: 40px;
     }
+    footer {
+        flex-direction: column;
+    }
 }
 
 @media screen and (min-width: 751px) {
@@ -66,12 +69,25 @@
     }
 }
 
+/* excepcion para espacio para frase de footer */
+
+footer span:first-child::after {
+  content: "\00a0";
+}
+/* fin */
+
 @media screen and (max-width: 750px){
     header a[href*="index.html"] {
         width: 100px;
     }
     section#estratos div:nth-child(2) {
         flex-direction: column;
+    }
+    section#trailer div{
+        flex-direction: column;
+    }
+    footer span:first-child::after {
+        content: none;
     }
 }
 
@@ -128,7 +144,7 @@ nav {
     text-align: right;
     right: 0;
     bottom: 5px;
-    width: 60%;
+    width: 75%;
     height: 100%;
     padding: 50px;
     position: absolute;
@@ -590,6 +606,7 @@ footer {
     align-items: center;
     font-size: 4rem;
     background-color: #0f0f0f;
+    display: flex;
 }
 
 /* Plugins*/

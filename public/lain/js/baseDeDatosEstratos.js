@@ -29,7 +29,7 @@ var estrato1 = {
     "imagen": ["01.jpg", "01-2.jpg"],
     "elenco": [LainI, YasuoI, MihoI, MikaI, AliceM, ReikaY, JuriK],
     "comentarios": [
-        {"usuario": "Despart74", "comentario": "No entendí nada", "calificacion": 5},
+        {"usuario": "Dernassil47", "comentario": "No entendí nada", "calificacion": 5},
         {"usuario": "Volken", "comentario": "Que raro", "calificacion": 4},
         {"usuario": "Deltran", "comentario": "Primero!!!", "calificacion": 5}
     ],
@@ -48,7 +48,7 @@ var estrato2 = {
     "comentarios": [
         {"usuario": "K6", "comentario": "No entendí nada", "calificacion": 2},
         {"usuario": "Volken", "comentario": "¿¡Cuántas copas tenés!?", "calificacion": 1},
-        {"usuario": "Despart74", "comentario": "Andaaa", "calificacion": 3},
+        {"usuario": "Dernassil47", "comentario": "Andaaa", "calificacion": 3},
         {"usuario": "Artusio Dev", "comentario": "Primero!!!", "calificacion": 5}
     ],
     "rating": {"total": 67, "votantes": 18}
@@ -80,11 +80,11 @@ var estrato4 = {
     "imagen": ["04.jpg", "04-2.jpg"],
     "elenco": [LainI, YasuoI, MihoI, MikaI, AliceM, ReikaY, JuriK, JJ, MiB2],
     "comentarios": [
-        {"usuario": "Volken", "comentario": "Dejá de spamear Despart74 >:(", "calificacion": 1},
-        {"usuario": "Despart74", "comentario": "Let's all love Lain", "calificacion": 5},
-        {"usuario": "Despart74", "comentario": "Let's all love Lain", "calificacion": 5},
-        {"usuario": "Despart74", "comentario": "Let's all love Lain", "calificacion": 5},
-        {"usuario": "Despart74", "comentario": "Let's all love Lain", "calificacion": 5},
+        {"usuario": "Volken", "comentario": "Dejá de spamear Dernassil47 >:(", "calificacion": 1},
+        {"usuario": "Dernassil47", "comentario": "Let's all love Lain", "calificacion": 5},
+        {"usuario": "Dernassil47", "comentario": "Let's all love Lain", "calificacion": 5},
+        {"usuario": "Dernassil47", "comentario": "Let's all love Lain", "calificacion": 5},
+        {"usuario": "Dernassil47", "comentario": "Let's all love Lain", "calificacion": 5},
         {"usuario": "Artusio Dev", "comentario": "Primero!!!", "calificacion": 1}
     ],
     "rating": {"total": 59, "votantes": 15}
@@ -101,7 +101,7 @@ var estrato5 = {
     "elenco": [LainI, YasuoI, MihoI, MikaI, AliceM, ReikaY, JuriK, MasamiE],
     "comentarios": [
         {"usuario": "Artusio Dev", "comentario": "No entendí nada", "calificacion": 2},
-        {"usuario": "Despart74", "comentario": "Me desuscribo", "calificacion": 1},
+        {"usuario": "Dernassil47", "comentario": "Me desuscribo", "calificacion": 1},
         {"usuario": "K6", "comentario": "Primero!!!", "calificacion": 5}
     ],
     "rating": {"total": 61, "votantes": 16}
@@ -118,9 +118,9 @@ var estrato6 = {
     "elenco": [LainI, YasuoI, MihoI, MikaI, AliceM, ReikaY, JuriK],
     "comentarios": [
         {"usuario": "Volken", "comentario": "No entendí nada", "calificacion": 2},
-        {"usuario": "Despart74", "comentario": "Sub x sub", "calificacion": 5},
-        {"usuario": "Despart74", "comentario": "Hola. ¿Saben dónde se encuentran los capitulos siguientes?", "calificacion": 2},
-        {"usuario": "Despart74", "comentario": "Qué loco", "calificacion": 3},
+        {"usuario": "Dernassil47", "comentario": "Sub x sub", "calificacion": 5},
+        {"usuario": "Dernassil47", "comentario": "Hola. ¿Saben dónde se encuentran los capitulos siguientes?", "calificacion": 2},
+        {"usuario": "Dernassil47", "comentario": "Qué loco", "calificacion": 3},
         {"usuario": "K6", "comentario": "Primero!!!", "calificacion": 2}
     ],
     "rating": {"total": 56, "votantes": 15}
@@ -227,7 +227,7 @@ var estrato12 = {
     "imagen": ["12.jpg", "12-2.jpg"],
     "elenco": [LainI, MikaI, AliceM, MasamiE, ReikaY, JuriK, MiB1, MiB2],
     "comentarios": [
-        {"usuario": "Despart74", "comentario": "No entendí nada", "calificacion": 2},
+        {"usuario": "Dernassil47", "comentario": "No entendí nada", "calificacion": 2},
         {"usuario": "Volken", "comentario": "No lo vi todavía y ya sé que va a ser un gran estrato :)", "calificacion": 5},
         {"usuario": "Deltran", "comentario": "Una vez me pasó eso :O", "calificacion": 3}
     ],
@@ -245,7 +245,7 @@ var estrato13 = {
     "elenco": [LainI, YasuoI, MihoI, MikaI, AliceM, ReikaY, JuriK, MasamiE],
     "comentarios": [
         {"usuario": "Artusio Dev", "comentario": "Yo solo sé que no sé nada", "calificacion": 5},
-        {"usuario": "Despart74", "comentario": "No entendí nada", "calificacion": 2},
+        {"usuario": "Dernassil47", "comentario": "No entendí nada", "calificacion": 2},
         {"usuario": "YimiYian", "comentario": "Una obra maestra concluye", "calificacion": 5},
         {"usuario": "Deltran", "comentario": "Me traumé", "calificacion": 3},
         {"usuario": "Volken", "comentario": "¡Que final épico!", "calificacion": 5},
