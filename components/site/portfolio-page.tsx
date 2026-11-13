@@ -139,7 +139,7 @@ export default function PortfolioPage() {
       <section className="ticker" aria-label="Creative disciplines"><div className="ticker-track">{[0, 1].map((copyIndex) => <span className="ticker-copy" key={copyIndex}>{[t.ticker, t.ticker2, t.ticker3, t.ticker4].map((item) => <span key={`${copyIndex}-${item}`}>{item}<b>✳</b></span>)}</span>)}</div></section>
 
       <section className="work-section" id="work">
-        <div className="section-heading"><p className="eyebrow">{t.workEyebrow} / 001—{countLabel}</p><p className="section-count">( {String(events.length).padStart(2, '0')} )</p></div>
+        <div className="section-heading"><p className="eyebrow">{t.workEyebrow}</p></div>
         <div className="project-grid">{events.map((project) => {
           const title = localizedValue(project.title, language)
           const description = localizedValue(project.description, language)
