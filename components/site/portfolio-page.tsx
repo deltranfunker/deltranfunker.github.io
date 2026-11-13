@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowDownRight, ArrowUpRight, Globe2, Mail, Phone } from 'lucide-react'
 import useSWR from 'swr'
 import { getPublicSiteContent } from '@/lib/site-content-api'
+import EventDetailPage from '@/components/site/event-detail-page'
 import {
   DEFAULT_PUBLIC_CONTENT,
   type Locale,
@@ -15,19 +16,21 @@ const copy = {
     navWork: 'Work', navAbout: 'About', navContact: 'Contact', available: 'AVAILABLE FOR SELECT SHOWS', scroll: 'SCROLL TO EXPLORE',
     lineOne: 'LIVE', lineTwo: 'VISUAL', lineThree: 'WORLDS', stageLabel: 'DELTRAN FUNKER / MONTEVIDEO', stageTitle: 'REALTIME|VISUAL WORLDS', intro: 'Real-time visuals for the\nspace between sound and light.',
     ticker: 'VJ', ticker2: 'VISUALIST', ticker3: 'VISUAL ART', ticker4: 'VIDEOMAPPING',
-    workEyebrow: 'EVENTS', contactEyebrow: 'GOT A FREQUENCY?', contactTitle: 'LET’S MAKE\nSOMETHING MOVE.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'BACK TO TOP',
+    workEyebrow: 'EVENTS', viewEvent: 'View event gallery', contactEyebrow: 'GOT A FREQUENCY?',
+    contactTitle: 'LET’S MAKE\nSOMETHING MOVE.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'BACK TO TOP',
   },
   es: {
     navWork: 'Obra', navAbout: 'Sobre mí', navContact: 'Contacto', available: 'DISPONIBLE PARA FECHAS', scroll: 'DESLIZÁ PARA EXPLORAR',
     lineOne: 'MUNDOS', lineTwo: 'VISUALES', lineThree: 'EN VIVO', stageLabel: 'DELTRAN FUNKER / MONTEVIDEO', stageTitle: 'VISUALES|EN TIEMPO REAL', intro: 'Visuales en tiempo real para\nel espacio entre sonido y luz.',
     ticker: 'VJ', ticker2: 'VISUALISTA', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
-    workEyebrow: 'EVENTOS', contactEyebrow: '¿SINTONIZAMOS?', contactTitle: 'HAGAMOS\nQUE SE MUEVA.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLVER ARRIBA',
+    workEyebrow: 'EVENTOS', viewEvent: 'Ver galería del evento', contactEyebrow: '¿SINTONIZAMOS?',
+    contactTitle: 'HAGAMOS\nQUE SE MUEVA.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLVER ARRIBA',
   },
   pt: {
     navWork: 'Trabalhos', navAbout: 'Sobre', navContact: 'Contato', available: 'DISPONÍVEL PARA EVENTOS', scroll: 'ROLE PARA EXPLORAR',
     lineOne: 'MUNDOS', lineTwo: 'VISUAIS', lineThree: 'AO VIVO', stageLabel: 'DELTRAN FUNKER / MONTEVIDÉU', stageTitle: 'VISUAIS|EM TEMPO REAL', intro: 'Visuais em tempo real para\no espaço entre som e luz.',
     ticker: 'VJ', ticker2: 'ARTISTA VISUAL', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
-    workEyebrow: 'EVENTOS', contactEyebrow: 'QUAL É A FREQUÊNCIA?', contactTitle: 'VAMOS FAZER\nALGO SE MOVER.', location: '34° S / 56° W · MONTEVIDÉU · URUGUAI 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLTAR AO TOPO',
+    workEyebrow: 'EVENTOS', viewEvent: 'Ver galeria do evento', contactEyebrow: 'QUAL É A FREQUÊNCIA?', contactTitle: 'VAMOS FAZER\nALGO SE MOVER.', location: '34° S / 56° W · MONTEVIDÉU · URUGUAI 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLTAR AO TOPO',
   },
 } satisfies Record<Locale, Record<string, string>>
 
@@ -76,6 +79,7 @@ function safePhone(value: string | null) {
 export default function PortfolioPage() {
   const [language, setLanguage] = useState<Locale>('en')
   const [isScrolled, setIsScrolled] = useState(false)
+  const [selectedEventReference, setSelectedEventReference] = useState<{ id?: string; displayNumber?: string } | null>(null)
   const logoRef = useRef<HTMLAnchorElement>(null)
   const { data: content = DEFAULT_PUBLIC_CONTENT } = useSWR('public-site-content', getPublicSiteContent, {
     fallbackData: DEFAULT_PUBLIC_CONTENT,
@@ -139,14 +143,14 @@ export default function PortfolioPage() {
         <div className="project-grid">{events.map((project) => {
           const title = localizedValue(project.title, language)
           const description = localizedValue(project.description, language)
-          return <div className="project" key={project.id ?? project.display_number}>
+          return <button className="project" type="button" key={project.id ?? project.display_number} onClick={() => setSelectedEventReference({ id: project.id, displayNumber: project.display_number })} aria-label={`${t.viewEvent}: ${title}`}>
             <div className={`project-art ${project.visual_style || 'visual-one'}`}>
               {project.media_url && (project.media_type === 'video'
                 ? <video className="project-media" src={project.media_url} muted loop autoPlay playsInline preload="metadata" aria-label={`${title} project video`} />
                 : <img className="project-media" src={project.media_url} alt={`${title} project visual`} loading="lazy" decoding="async" />)}
             </div>
             <div className="project-meta"><h3>{title}</h3><span>{description}</span></div>
-          </div>
+          </button>
         })}</div>
       </section>
 
@@ -158,6 +162,7 @@ export default function PortfolioPage() {
         {phone && <a className="contact-link" href={`tel:${phone.dial}`}><Phone aria-hidden="true" />{phone.label}<ArrowUpRight aria-hidden="true" /></a>}
       </section>
       <footer><span>{t.footer}</span><a href="#top">{t.back} ↑</a></footer>
+      <EventDetailPage eventReference={selectedEventReference} language={language} onClose={() => setSelectedEventReference(null)} />
     </main>
   )
 }

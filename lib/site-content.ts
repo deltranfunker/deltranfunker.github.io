@@ -7,6 +7,13 @@ export const SITE_LANGUAGES = [
 export type Locale = (typeof SITE_LANGUAGES)[number]['code']
 export type LocalizedString = Partial<Record<Locale, string>>
 
+export type EventGalleryMedia = {
+  id: string
+  type: 'image' | 'video' | 'embed'
+  url: string
+  caption: LocalizedString
+}
+
 export type AboutCopy = {
   eyebrow: string
   title: string
@@ -34,6 +41,8 @@ export type PortfolioEvent = {
   sort_order: number
   title: LocalizedString
   description: LocalizedString
+  detail_description: LocalizedString
+  gallery_media: EventGalleryMedia[]
   media_url: string | null
   media_type: 'image' | 'video' | 'none'
   visual_style: string
@@ -43,9 +52,13 @@ export type PortfolioEvent = {
   updated_at?: string
 }
 
+export type PortfolioEventSummary = Pick<PortfolioEvent,
+  'id' | 'display_number' | 'sort_order' | 'title' | 'description' | 'media_url' | 'media_type' | 'visual_style' | 'link_url' | 'is_active' | 'created_at' | 'updated_at'
+>
+
 export type PublicSiteContent = {
   settings: SiteSettings
-  events: PortfolioEvent[]
+  events: PortfolioEventSummary[]
 }
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
@@ -78,13 +91,26 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   show_contact_phone: false,
 }
 
+const DEFAULT_EVENT_IMAGE_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker3.23.png-QxaAIZuw9EfIrFGmK8edVpV93JNGgh.jpeg'
+
+function createDefaultEventGallery(displayNumber: string): EventGalleryMedia[] {
+  return [1, 2].map((index) => ({
+    id: `default-event-${displayNumber}-${index}`,
+    type: 'image',
+    url: DEFAULT_EVENT_IMAGE_URL,
+    caption: {},
+  }))
+}
+
 export const DEFAULT_EVENTS: PortfolioEvent[] = [
   {
     display_number: '01',
     sort_order: 1,
     title: { en: 'FUNKER.exe' },
     description: { en: 'Live visual system' },
-    media_url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker3.23.png-QxaAIZuw9EfIrFGmK8edVpV93JNGgh.jpeg',
+    detail_description: { en: 'A live audiovisual system that transforms sound into a responsive visual world. Built for the energy of the room, each performance shifts between custom motion, realtime imagery, and unexpected digital textures.' },
+    gallery_media: createDefaultEventGallery('01'),
+    media_url: DEFAULT_EVENT_IMAGE_URL,
     media_type: 'image',
     visual_style: 'visual-one',
     link_url: 'https://www.instagram.com/deltranfunker/',
@@ -95,7 +121,9 @@ export const DEFAULT_EVENTS: PortfolioEvent[] = [
     sort_order: 2,
     title: { en: 'KEY TO THE VOID' },
     description: { en: '3D character / realtime' },
-    media_url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DeltranFunker3.23.png-QxaAIZuw9EfIrFGmK8edVpV93JNGgh.jpeg',
+    detail_description: { en: 'An exploration of character and atmosphere in realtime 3D. Procedural motion, sculpted forms, and shifting light open a passage into a strange, luminous space.' },
+    gallery_media: createDefaultEventGallery('02'),
+    media_url: DEFAULT_EVENT_IMAGE_URL,
     media_type: 'image',
     visual_style: 'visual-two',
     link_url: 'https://www.instagram.com/deltranfunker/',
@@ -106,6 +134,8 @@ export const DEFAULT_EVENTS: PortfolioEvent[] = [
     sort_order: 3,
     title: { en: 'SOFT ERROR' },
     description: { en: 'Shader experiments' },
+    detail_description: { en: 'Soft Error gathers small visual glitches, custom shaders, and signal noise into a study of fragile digital systems. Each experiment finds beauty in the moment an image breaks.' },
+    gallery_media: [],
     media_url: null,
     media_type: 'none',
     visual_style: 'visual-three',

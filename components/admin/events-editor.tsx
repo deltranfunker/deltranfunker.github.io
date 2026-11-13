@@ -19,6 +19,8 @@ function newEvent(events: PortfolioEvent[]): PortfolioEvent {
     sort_order: nextOrder,
     title: { en: '', es: '', pt: '' },
     description: { en: '', es: '', pt: '' },
+    detail_description: { en: '', es: '', pt: '' },
+    gallery_media: [],
     media_url: null,
     media_type: 'none',
     visual_style: 'visual-one',

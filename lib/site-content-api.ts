@@ -3,6 +3,7 @@ import {
   DEFAULT_SITE_SETTINGS,
   DEFAULT_PUBLIC_CONTENT,
   type PortfolioEvent,
+  type PortfolioEventSummary,
   type PublicSiteContent,
   type SiteSettings,
 } from '@/lib/site-content'
@@ -15,7 +16,8 @@ export type AdminAccess =
   | { status: 'admin'; account: string }
 
 const SETTINGS_COLUMNS = 'id,hero_media_url,hero_media_type,hero_scanlines_enabled,about_copy,contact_email,contact_instagram,contact_phone,show_contact_email,show_contact_instagram,show_contact_phone,updated_at'
-const EVENT_COLUMNS = 'id,display_number,sort_order,title,description,media_url,media_type,visual_style,link_url,is_active,created_at,updated_at'
+const EVENT_SUMMARY_COLUMNS = 'id,display_number,sort_order,title,description,media_url,media_type,visual_style,link_url,is_active,created_at,updated_at'
+const EVENT_COLUMNS = `${EVENT_SUMMARY_COLUMNS},detail_description,gallery_media`
 
 export async function getPublicSiteContent(): Promise<PublicSiteContent> {
   const client = getSupabaseBrowserClient()
@@ -23,7 +25,7 @@ export async function getPublicSiteContent(): Promise<PublicSiteContent> {
 
   const [settingsResult, eventsResult] = await Promise.all([
     client.from('site_settings_public').select(SETTINGS_COLUMNS).eq('id', 'primary').maybeSingle(),
-    client.from('events').select(EVENT_COLUMNS).eq('is_active', true).order('sort_order', { ascending: true }),
+    client.from('events').select(EVENT_SUMMARY_COLUMNS).eq('is_active', true).order('sort_order', { ascending: true }),
   ])
 
   if (settingsResult.error || eventsResult.error) {
@@ -32,8 +34,23 @@ export async function getPublicSiteContent(): Promise<PublicSiteContent> {
 
   return {
     settings: (settingsResult.data as SiteSettings | null) ?? DEFAULT_SITE_SETTINGS,
-    events: (eventsResult.data as PortfolioEvent[] | null) ?? DEFAULT_EVENTS,
+    events: (eventsResult.data as PortfolioEventSummary[] | null) ?? DEFAULT_EVENTS,
   }
+}
+
+export async function fetchPublicEvent(reference: { id?: string; displayNumber?: string }): Promise<PortfolioEvent | null> {
+  const client = getSupabaseBrowserClient()
+  const fallback = reference.displayNumber
+    ? DEFAULT_EVENTS.find((event) => event.display_number === reference.displayNumber) ?? null
+    : null
+  if (!client) return fallback
+  if (!reference.id && !reference.displayNumber) return null
+
+  let query = client.from('events').select(EVENT_COLUMNS).eq('is_active', true)
+  query = reference.id ? query.eq('id', reference.id) : query.eq('display_number', reference.displayNumber!)
+  const { data, error } = await query.maybeSingle()
+  if (error) throw new Error('This event could not be loaded.')
+  return (data as PortfolioEvent | null) ?? null
 }
 
 export async function getAdminAccess(): Promise<AdminAccess> {
@@ -122,6 +139,8 @@ export async function savePortfolioEvent(event: PortfolioEvent): Promise<Portfol
     sort_order: Number(event.sort_order),
     title: event.title,
     description: event.description,
+    detail_description: event.detail_description,
+    gallery_media: event.gallery_media,
     media_url: event.media_url,
     media_type: event.media_type,
     visual_style: event.visual_style,
