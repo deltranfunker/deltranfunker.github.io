@@ -119,9 +119,8 @@ export default function PortfolioPage() {
   return (
     <main className="site-shell" id="top">
       {showLoader && (
-        <div className="page-loader" role="status" aria-live="polite">
+        <div className="page-loader" role="status" aria-live="polite" aria-label={t.loading}>
           <span className="page-loader-spinner" aria-hidden="true" />
-          <span>{t.loading}</span>
         </div>
       )}
       <header className="topbar">
