@@ -17,20 +17,20 @@ const copy = {
     lineOne: 'LIVE', lineTwo: 'VISUAL', lineThree: 'WORLDS', stageLabel: 'DELTRAN FUNKER / MONTEVIDEO', stageTitle: 'REALTIME|VISUAL WORLDS', intro: 'Real-time visuals for the\nspace between sound and light.',
     ticker: 'VJ', ticker2: 'VISUALIST', ticker3: 'VISUAL ART', ticker4: 'VIDEOMAPPING',
     workEyebrow: 'EVENTS', viewEvent: 'View event gallery', contactEyebrow: 'GOT A FREQUENCY?',
-    contactTitle: 'LET’S MAKE\nSOMETHING MOVE.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'BACK TO TOP',
+    contactTitle: 'LET’S MAKE\nSOMETHING MOVE.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'BACK TO TOP', loading: 'Loading visuals…',
   },
   es: {
     navWork: 'Obra', navAbout: 'Sobre mí', navContact: 'Contacto', available: 'DISPONIBLE PARA FECHAS', scroll: 'DESLIZÁ PARA EXPLORAR',
     lineOne: 'MUNDOS', lineTwo: 'VISUALES', lineThree: 'EN VIVO', stageLabel: 'DELTRAN FUNKER / MONTEVIDEO', stageTitle: 'VISUALES|EN TIEMPO REAL', intro: 'Visuales en tiempo real para\nel espacio entre sonido y luz.',
     ticker: 'VJ', ticker2: 'VISUALISTA', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
     workEyebrow: 'EVENTOS', viewEvent: 'Ver galería del evento', contactEyebrow: '¿SINTONIZAMOS?',
-    contactTitle: 'HAGAMOS\nQUE SE MUEVA.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLVER ARRIBA',
+    contactTitle: 'HAGAMOS\nQUE SE MUEVA.', location: '34° S / 56° W · MONTEVIDEO · URUGUAY 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLVER ARRIBA', loading: 'Cargando visuales…',
   },
   pt: {
     navWork: 'Trabalhos', navAbout: 'Sobre', navContact: 'Contato', available: 'DISPONÍVEL PARA EVENTOS', scroll: 'ROLE PARA EXPLORAR',
     lineOne: 'MUNDOS', lineTwo: 'VISUAIS', lineThree: 'AO VIVO', stageLabel: 'DELTRAN FUNKER / MONTEVIDÉU', stageTitle: 'VISUAIS|EM TEMPO REAL', intro: 'Visuais em tempo real para\no espaço entre som e luz.',
     ticker: 'VJ', ticker2: 'VISUALISTA', ticker3: 'ARTE VISUAL', ticker4: 'VIDEOMAPPING',
-    workEyebrow: 'EVENTOS', viewEvent: 'Ver galeria do evento', contactEyebrow: 'QUAL É A FREQUÊNCIA?', contactTitle: 'VAMOS FAZER\nALGO SE MOVER.', location: '34° S / 56° W · MONTEVIDÉU · URUGUAI 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLTAR AO TOPO',
+    workEyebrow: 'EVENTOS', viewEvent: 'Ver galeria do evento', contactEyebrow: 'QUAL É A FREQUÊNCIA?', contactTitle: 'VAMOS FAZER\nALGO SE MOVER.', location: '34° S / 56° W · MONTEVIDÉU · URUGUAI 🇺🇾', footer: 'MONTEVIDEO · URUGUAY 🇺🇾', back: 'VOLTAR AO TOPO', loading: 'Carregando visuais…',
   },
 } satisfies Record<Locale, Record<string, string>>
 
@@ -81,7 +81,8 @@ export default function PortfolioPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [selectedEventReference, setSelectedEventReference] = useState<{ id?: string; displayNumber?: string } | null>(null)
   const logoRef = useRef<HTMLAnchorElement>(null)
-  const { data: content = DEFAULT_PUBLIC_CONTENT } = useSWR('public-site-content', getPublicSiteContent, {
+  const [loadedHeroUrl, setLoadedHeroUrl] = useState<string | null>(null)
+  const { data: content = DEFAULT_PUBLIC_CONTENT, isLoading: isContentLoading } = useSWR('public-site-content', getPublicSiteContent, {
     fallbackData: DEFAULT_PUBLIC_CONTENT,
     revalidateOnFocus: true,
     shouldRetryOnError: false,
@@ -106,6 +107,8 @@ export default function PortfolioPage() {
 
   const t = copy[language]
   const settings = content.settings
+  const heroUrl = settings.hero_media_url
+  const showLoader = isContentLoading || Boolean(heroUrl && loadedHeroUrl !== heroUrl)
   const about = settings.about_copy[language] ?? settings.about_copy.en ?? DEFAULT_PUBLIC_CONTENT.settings.about_copy.en!
   const events = content.events
   const countLabel = String(events.length).padStart(3, '0')
@@ -115,6 +118,12 @@ export default function PortfolioPage() {
 
   return (
     <main className="site-shell" id="top">
+      {showLoader && (
+        <div className="page-loader" role="status" aria-live="polite">
+          <span className="page-loader-spinner" aria-hidden="true" />
+          <span>{t.loading}</span>
+        </div>
+      )}
       <header className="topbar">
         <span className="topbar-note">Deltran Funker</span>
         <label className="language-control"><Globe2 aria-hidden="true" /><span className="sr-only">Choose language</span><select value={language} onChange={(event) => { const nextLanguage = event.target.value as Locale; setLanguage(nextLanguage); document.documentElement.lang = nextLanguage }} aria-label="Choose language"><option value="es">🇺🇾 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option></select></label>
@@ -123,9 +132,11 @@ export default function PortfolioPage() {
 
       <section className="hero hero-logo-stage" aria-labelledby="hero-title">
         <div className="hero-media" aria-hidden="true">
-          {settings.hero_media_url && (settings.hero_media_type === 'video'
-            ? <video className="hero-background-media" src={settings.hero_media_url} autoPlay muted loop playsInline preload="metadata" />
-            : <img className="hero-background-media" src={settings.hero_media_url} alt="" />)}
+          {heroUrl && (settings.hero_media_type === 'video'
+            ? <video className="hero-background-media" src={heroUrl} autoPlay muted loop playsInline preload="metadata"
+                onLoadedData={() => setLoadedHeroUrl(heroUrl)} onError={() => setLoadedHeroUrl(heroUrl)} />
+            : <img className="hero-background-media" src={heroUrl} alt="" fetchPriority="high"
+                onLoad={() => setLoadedHeroUrl(heroUrl)} onError={() => setLoadedHeroUrl(heroUrl)} />)}
           <div className="hero-background-shade" />
           <div className="media-glow media-glow-a" /><div className="media-glow media-glow-b" /><div className="media-grid" />
           {settings.hero_scanlines_enabled && <div className="media-scanlines" />}

@@ -602,3 +602,32 @@ dialog.event-detail-page.is-visible::backdrop { background: rgb(147 151 162 / 34
   .event-modal-close, .event-gallery-thumb { transition: none; }
   .event-gallery-thumb:hover { transform: none; }
 }
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  background: var(--background);
+  color: var(--primary);
+}
+
+.page-loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: page-loader-spin 800ms linear infinite;
+}
+
+@keyframes page-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader-spinner { animation: none; }
+}
